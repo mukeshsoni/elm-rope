@@ -13,14 +13,17 @@ maxLeafNodeCapacity = 10
 
 -- build a rope, give a string
 build : String -> Rope
-build str =
+build str = buildWithMaxLeafCapacity maxLeafNodeCapacity str
+
+buildWithMaxLeafCapacity : Int -> String -> Rope
+buildWithMaxLeafCapacity capacity str =
     if String.length str > maxLeafNodeCapacity then -- break into left-right nodes
         let
             stringLength = String.length str
             leftRopeLength = floor  ((toFloat stringLength) / 2)
             rightRopeLength = stringLength - leftRopeLength
         in
-            RopeNode {weight = leftRopeLength} (build <| String.left leftRopeLength str) (build <| String.right rightRopeLength str)
+            RopeNode {weight = leftRopeLength} (buildWithMaxLeafCapacity capacity <| String.left leftRopeLength str) (buildWithMaxLeafCapacity capacity <| String.right rightRopeLength str)
     else
         LeafRopeNode {weight = String.length str, text = str}
 
