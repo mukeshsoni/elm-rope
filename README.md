@@ -39,3 +39,11 @@ Returns the string which the rope has encoded.
 `atIndex : Rope -> Int -> Maybe Char`
 
 Returns the character at a given index in the string encoded in the rope. Returns `Nothing`, if the index is unreachable.
+
+
+### Development
+
+1. Install elm dependencies - `elm package install`
+2. Go to tests folder and install node dependencies - `npm i`
+3. In tests folder, install elm test dependencies - `elm package install`
+4. Run tests - `npm test`
