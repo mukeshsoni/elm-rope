@@ -88,8 +88,23 @@ split i r =
                 in
                     (RopeNode {weight=getSize r1} r1 r21, r22)
 
--- insert : Rope -> Int -> Rope
--- insert r i
+insert : Int -> String -> Rope -> Rope
+insert i str r =
+    let
+        (r1, r2) = split i r
+    in
+        concat (concat r1 (LeafRopeNode {weight = String.length str, text = str})) r2
+
+delete : Int -> Int -> Rope -> Rope
+delete i j r =
+    if i < 0 then
+        r
+    else if (i + j) > getSize r then
+        LeafRopeNode {weight=0, text=""}
+    else
+        let
+            (r1, r2') = split i r
+            (r2, r3) = split j r2'
+        in
+            concat r1 r3
 -- balance : Rope -> Rope
--- romoveAt : Rope -> Int -> Rope
--- charAt : Rope -> Int -> Char

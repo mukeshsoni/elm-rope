@@ -45,4 +45,8 @@ tests =
             <| assertEqual (Rope.atIndex sampleRope 14) (Just 'y')
         , test "splitting a rope"
             <| assertEqual (getFirstRopeString (Rope.split 11 sampleRope)) "Iamallgoodo"
+        , test "insert string"
+            <| assertEqual (Rope.toString (Rope.insert 3 "haddi" sampleRope)) "Iamhaddiallgoodormaybenot"
+        , test "delete substring at given indices"
+            <| assertEqual (Rope.toString (Rope.delete 2 5 sampleRope)) "Iaoodormaybenot"
         ]

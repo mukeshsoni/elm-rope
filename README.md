@@ -40,6 +40,20 @@ Returns the string which the rope has encoded.
 
 Returns the character at a given index in the string encoded in the rope. Returns `Nothing`, if the index is unreachable.
 
+#### split
+`split : Int -> Rope -> (Rope, Rope)`
+
+Splits the rope at the given index into two ropes. Split forms the basis of insertion operation.
+
+#### insert
+`insert : Int -> String -> Rope -> Rope`
+
+inserts a string in the rope at the given index
+
+#### delete
+`delete : Int -> Int -> Rope -> Rope`
+
+deletes a substring from the rope given a startIndex and the length of substring to be deleted. E.g. assume r is a Rope which has the string `I blamah you`, then `Rope.delete 3 3 r` will delete "lam" from the rope and return another rope which contains `i bah you`
 
 ### Development
 
