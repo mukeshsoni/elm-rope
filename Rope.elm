@@ -67,9 +67,29 @@ getCharAt : String -> Int -> Maybe Char
 getCharAt s i =
     Array.get i (Array.fromList (String.toList s))
 
-split : Int -> Rope -> Rope
-split i r = r
+split : Int -> Rope -> (Rope, Rope)
+split i r =
+    case r of
+        EmptyRopeNode -> (EmptyRopeNode, EmptyRopeNode)
+        LeafRopeNode {weight, text} ->
+            if i == 0 then -- split point is right at the start of this node
+                (EmptyRopeNode, LeafRopeNode {weight=weight, text=text})
+            else -- split the node itself
+                (LeafRopeNode {weight = i, text = String.left i text}, LeafRopeNode {weight = weight - i, text = String.right (weight - i) text})
+        RopeNode {weight} r1 r2 ->
+            if weight > i then
+                let
+                    (r11, r12) = split i r1
+                in
+                    (r11, RopeNode {weight = getSize r12} r12 r2)
+            else
+                let
+                    (r21, r22) = split (i - weight) r2
+                in
+                    (RopeNode {weight=getSize r1} r1 r21, r22)
+
 -- insert : Rope -> Int -> Rope
+-- insert r i
 -- balance : Rope -> Rope
 -- romoveAt : Rope -> Int -> Rope
 -- charAt : Rope -> Int -> Char

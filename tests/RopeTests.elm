@@ -19,6 +19,9 @@ sampleRope2 =
         (Rope.LeafRopeNode {weight = 5, text = "What is your name, "})
         (Rope.LeafRopeNode {weight = 8, text = "punk?"})
 
+getFirstRopeString : (Rope.Rope, Rope.Rope) -> String
+getFirstRopeString (r1, _) = Rope.toString r1
+
 tests : Test
 tests =
     suite "elm-rope tests"
@@ -40,4 +43,6 @@ tests =
             <| assertEqual (Rope.atIndex sampleRope 3) (Just 'a')
         , test "get char at index"
             <| assertEqual (Rope.atIndex sampleRope 14) (Just 'y')
+        , test "splitting a rope"
+            <| assertEqual (getFirstRopeString (Rope.split 11 sampleRope)) "Iamallgoodo"
         ]
