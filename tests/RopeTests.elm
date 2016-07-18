@@ -49,4 +49,6 @@ tests =
             <| assertEqual (Rope.toString (Rope.insert 3 "haddi" sampleRope)) "Iamhaddiallgoodormaybenot"
         , test "delete substring at given indices"
             <| assertEqual (Rope.toString (Rope.delete 2 5 sampleRope)) "Iaoodormaybenot"
+        , test "substring"
+            <| assertEqual (Rope.substr 2 5 sampleRope) "mallg"
         ]

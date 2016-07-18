@@ -1,7 +1,5 @@
 #elm-rope
 
-** WIP
-
 Rope data structure implemented in elm. Implemented as per the specs in this wikipedia article [https://en.wikipedia.org/wiki/Rope_(data_structure](https://en.wikipedia.org/wiki/Rope_(data_structure))
 
 Motivation for rope data structure, from the wikipedia article -
@@ -54,6 +52,18 @@ inserts a string in the rope at the given index
 `delete : Int -> Int -> Rope -> Rope`
 
 deletes a substring from the rope given a startIndex and the length of substring to be deleted. E.g. assume r is a Rope which has the string `I blamah you`, then `Rope.delete 3 3 r` will delete "lam" from the rope and return another rope which contains `i bah you`
+
+If start index is less than 0, it returns the same rope.
+If the sum of start index and the length of the substring to delete exceeds the length of the string in the rope, a LeafRopeNode is returned which contains an empty string ("")
+
+#### substr
+`substr : Int -> Int -> Rope -> String`
+
+Finds substring from index i for length j.
+
+If start index is less than 0, return empty string.
+
+If the sum of start index and the length of the substring to delete exceeds the length of the string in the rope, returns the whole string in the rope.
 
 ### Development
 

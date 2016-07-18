@@ -1,6 +1,5 @@
 module Rope exposing (..)
 import String
-import Char
 import Array
 
 type Rope
@@ -9,12 +8,14 @@ type Rope
     | RopeNode {weight: Int} Rope Rope
 
 -- will use it later to break string into multiple leaf nodes in build function
+maxLeafNodeCapacity : number
 maxLeafNodeCapacity = 10
 
--- build a rope, give a string
+-- Build a rope, give a string. Takes `maxLeafNodeCapacity` as 10 (max length of a string stored in leaf node).
 build : String -> Rope
 build str = buildWithMaxLeafCapacity maxLeafNodeCapacity str
 
+-- Like `build`, but user can specify the max capacity of leaf node.
 buildWithMaxLeafCapacity : Int -> String -> Rope
 buildWithMaxLeafCapacity capacity str =
     if String.length str > maxLeafNodeCapacity then -- break into left-right nodes
@@ -27,10 +28,12 @@ buildWithMaxLeafCapacity capacity str =
     else
         LeafRopeNode {weight = String.length str, text = str}
 
+-- Concatenate two ropes into a single rope.
 concat : Rope -> Rope -> Rope
 concat r1 r2
     = RopeNode {weight = getSize r1} r1 r2
 
+-- Returns the length of the string contained in the rope.
 getSize : Rope -> Int
 getSize r = getSize' r 0
 
@@ -41,6 +44,7 @@ getSize' r acc =
         LeafRopeNode {weight} -> weight + acc
         RopeNode _ r1 r2 -> (getSize r1) + (getSize r2)
 
+-- Returns the string which the rope has encoded.
 toString : Rope -> String
 toString r =
     case r of
@@ -48,6 +52,7 @@ toString r =
         LeafRopeNode {text} -> text
         RopeNode _ r1 r2 -> toString r1 ++ toString r2
 
+-- Returns the character at a given index in the string encoded in the rope. Returns `Nothing`, if the index is unreachable.
 atIndex : Rope -> Int -> Maybe Char
 atIndex r i =
     case r of
@@ -67,6 +72,7 @@ getCharAt : String -> Int -> Maybe Char
 getCharAt s i =
     Array.get i (Array.fromList (String.toList s))
 
+-- Splits the rope at the given index into two ropes. Split forms the basis of insertion operation.
 split : Int -> Rope -> (Rope, Rope)
 split i r =
     case r of
@@ -88,6 +94,7 @@ split i r =
                 in
                     (RopeNode {weight=getSize r1} r1 r21, r22)
 
+-- inserts a string in the rope at the given index
 insert : Int -> String -> Rope -> Rope
 insert i str r =
     let
@@ -95,6 +102,9 @@ insert i str r =
     in
         concat (concat r1 (LeafRopeNode {weight = String.length str, text = str})) r2
 
+-- deletes a substring from the rope given a startIndex and the length of substring to be deleted.
+-- E.g. assume r is a Rope which has the string `I blamah you`, then `Rope.delete 3 3 r` will delete
+-- "lam" from the rope and return another rope which contains `i bah you`
 delete : Int -> Int -> Rope -> Rope
 delete i j r =
     if i < 0 then
@@ -107,4 +117,19 @@ delete i j r =
             (r2, r3) = split j r2'
         in
             concat r1 r3
+
+-- finds substring from index i for length j
+substr : Int -> Int -> Rope -> String
+substr i j r =
+    if i < 0 then
+        ""
+    else if (i + j) > getSize r then
+        toString r
+    else
+        let
+            (r1, r2') = split i r
+            (r2, r3) = split j r2'
+        in
+            toString r2
+
 -- balance : Rope -> Rope
